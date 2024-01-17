@@ -1,21 +1,14 @@
 public class Cell {
     private int status;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
+    static Colors_Terminal c_term = new Colors_Terminal();
 
-    public void Class() {
-        getRepresentation();
-    }
-
-    void getRepresentation() {
+    void getRepresentation(int number) {
         if (status == 0) {
-            System.out.print("|   ");
+            System.out.print("| " + number + " ");
         } else if (status == 1) {
-            System.out.print("| " + ANSI_YELLOW + "O " +ANSI_RESET);
+            System.out.print("| " + c_term.YELLOW + "O " + c_term.RESET);
         } else if (status == 2) {
-            System.out.print("| " + ANSI_BLUE + "X " + ANSI_RESET);
+            System.out.print("| " + c_term.BLUE + "X " + c_term.RESET);
         }else {
             System.out.println("Error, player out of bounds");
         }
