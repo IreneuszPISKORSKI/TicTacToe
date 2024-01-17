@@ -88,20 +88,23 @@ public class TicTacToe {
             System.out.println(" enter the grid number:");
             try {
                 pos_a = myObj.nextInt() -1 ;  // Read user input
-                if (pos_a>=0 && pos_a<size*size){
-                    pos_x = pos_a % size;
-                    pos_y = pos_a / size;
-                    if (board_cells[pos_y][pos_x].getStatus()==0 ){
-                        repeat=false;
-                    }else {
-                        System.out.println("This field is already occupied");
-                    }
-                }else {
-                    System.out.println("Please re-enter your choice, position off the grid");
-                }
             }catch (Exception e){
                 System.out.println("Please re-enter your choice, this time number...");
+                continue;
             }
+
+            if (pos_a<0 && pos_a>=size*size) {
+                System.out.println("Please re-enter your choice, position off the grid");
+                continue;
+            }
+
+            pos_x = pos_a % size;
+            pos_y = pos_a / size;
+            if (board_cells[pos_y][pos_x].getStatus()==0 ){
+               break;
+            }
+            System.out.println("This field is already occupied");
+
         }
         pos[0] = pos_y;
         pos[1] = pos_x;
@@ -113,32 +116,51 @@ public class TicTacToe {
         boolean draw = true;
         for (int i = 0; i < size*size; i++) {
             setOwner(players[t]);
-            t = t == 0 ? 1 : 0;
             display();
-//            if (!did_i_win()){
-//                System.out.println("Player " + players[t].getName() +" win!");
-//                draw = false;
-//                break;
-//            }
+            if (did_i_win()){
+                System.out.println("Player " + players[t].getName() +" win!");
+                draw = false;
+                break;
+            }
+            t = t == 0 ? 1 : 0;
         }
         if (draw){
             System.out.println("Draw!");
         }
     }
-//    static boolean did_i_win(){
-//        int test_0_0 = board_cells[0][0].getStatus();
-//        int test_1_0 = board_cells[1][0].getStatus();
-//        int test_2_0 = board_cells[2][0].getStatus();
-//        int test_0_1 = board_cells[0][1].getStatus();
-//        int test_1_1 = board_cells[1][1].getStatus();
-//        int test_2_1 = board_cells[2][1].getStatus();
-//        int test_0_2 = board_cells[0][2].getStatus();
-//        int test_1_2 = board_cells[1][2].getStatus();
-//        int test_2_2 = board_cells[2][2].getStatus();
-//        boolean test_res_hor = (test_1_1 == test_2_1 && test_1_1 == test_0_1) || (test_1_2 == test_2_2 && test_1_2 == test_0_2) || (test_1_0 == test_2_0 && test_1_0 == test_0_0);
-//        boolean test_res_ver = (test_0_0 == test_0_1 && test_0_0 == test_0_2) || (test_1_0 == test_1_1 && test_1_0 == test_1_2) || (test_2_0 == test_2_1 && test_2_0 == test_2_2);
-//        boolean test_res_diag = (test_0_0 == test_1_1 && test_0_0 == test_2_2) || (test_2_0 == test_1_1 && test_2_0 == test_0_2);
-//
-//        return test_res_hor || test_res_ver || test_res_diag;
-//    }
+    static boolean did_i_win(){
+        boolean test = false;
+
+        for (int i = 0; i<size; i++){
+            for (int j = 0; j < size; j++) {
+                if (j<size-2 && i<size-2){
+                    if ((board_cells[i][j].getStatus() > 0
+                        && board_cells[i][j].getStatus() == board_cells[j+1][j+1].getStatus()
+                        && board_cells[i][j].getStatus() == board_cells[j+2][j+2].getStatus())
+                        ||
+                        (board_cells[i][j+2].getStatus() > 0
+                        && board_cells[i][j+2].getStatus() == board_cells[i+1][j+1].getStatus()
+                        && board_cells[i][j+2].getStatus() == board_cells[i+2][j].getStatus())
+                    ){
+                        test = true;
+                    }
+                }
+                else if (i<size-2){
+                    if ((board_cells[i][j].getStatus() > 0
+                        && board_cells[i][j].getStatus() == board_cells[i+1][j].getStatus()
+                        && board_cells[i][j].getStatus() == board_cells[i+2][j].getStatus())){
+                        test = true;
+                    }
+                }
+                else if (j<size-2){
+                    if ((board_cells[i][j].getStatus() > 0
+                        && board_cells[i][j].getStatus() == board_cells[i][j+1].getStatus()
+                        && board_cells[i][j].getStatus() == board_cells[i][j+2].getStatus())){
+                        test = true;
+                    }
+                }
+            }
+        }
+        return test;
+    }
 }
