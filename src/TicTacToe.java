@@ -33,7 +33,7 @@ public class TicTacToe {
         int start = 0;
         for (int i = 0; i < players.length ; i++) {
             String name = scanner_user();
-            players[i] = new Player(start, name);
+            players[i] = new ArtificialPlayer(start, name);
             if (start == 0) {
                 System.out.println("The player "+ c_term.YELLOW + players[0].getName() + c_term.RESET + " plays as " + c_term.YELLOW + "O" + c_term.RESET);
                 System.out.println(" ");
@@ -71,30 +71,36 @@ public class TicTacToe {
         int pos_a; // unified position
         int[] pos = new int[2];
 
-        boolean repeat = true;
-        while (repeat) {
-            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+//        boolean repeat = true;
+        while (true) {
 
-//            System.out.println("Enter pos x:");
-//            pos_x = myObj.nextInt();  // Read user input
-//            System.out.println("Enter pos y:");
-//            pos_y = myObj.nextInt();  // Read user input
+//            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+//
+////            System.out.println("Enter pos x:");
+////            pos_x = myObj.nextInt();  // Read user input
+////            System.out.println("Enter pos y:");
+////            pos_y = myObj.nextInt();  // Read user input
+//
+//            if(player.getRepresentation()==1){
+//                System.out.print(c_term.YELLOW + player.getName() + c_term.RESET);
+//            }else {
+//                System.out.print(c_term.BLUE + player.getName() + c_term.RESET);
+//            }
+//            System.out.println(" enter the grid number:");
+//            try {
+//                pos_a = myObj.nextInt() -1 ;  // Read user input
+//            }catch (Exception e){
+//                System.out.println("Please re-enter your choice, this time number...");
+//                continue;
+//            }
+//
 
-            if(player.getRepresentation()==1){
-                System.out.print(c_term.YELLOW + player.getName() + c_term.RESET);
-            }else {
-                System.out.print(c_term.BLUE + player.getName() + c_term.RESET);
-            }
-            System.out.println(" enter the grid number:");
-            try {
-                pos_a = myObj.nextInt() -1 ;  // Read user input
-            }catch (Exception e){
-                System.out.println("Please re-enter your choice, this time number...");
-                continue;
-            }
-
-            if (pos_a<0 && pos_a>=size*size) {
+            pos_a = player.get_number();
+            System.out.println(pos_a);
+            if (pos_a<0 && pos_a>=size*size && !player.is_Im_ai()) {
                 System.out.println("Please re-enter your choice, position off the grid");
+                continue;
+            } else if (pos_a<0 && pos_a>=size*size && player.is_Im_ai()) {
                 continue;
             }
 
@@ -103,7 +109,9 @@ public class TicTacToe {
             if (board_cells[pos_y][pos_x].getStatus()==0 ){
                break;
             }
-            System.out.println("This field is already occupied");
+            if (player.is_Im_ai()){
+                System.out.println("This field is already occupied");
+            }
 
         }
         pos[0] = pos_y;
@@ -113,54 +121,72 @@ public class TicTacToe {
 
     static void play(){
         int t = 0;
-        boolean draw = true;
         for (int i = 0; i < size*size; i++) {
             setOwner(players[t]);
             display();
             if (did_i_win()){
                 System.out.println("Player " + players[t].getName() +" win!");
-                draw = false;
-                break;
+                return;
             }
             t = t == 0 ? 1 : 0;
         }
-        if (draw){
-            System.out.println("Draw!");
-        }
-    }
-    static boolean did_i_win(){
-        boolean test = false;
+        System.out.println("Draw!");
 
+    }
+    static boolean did_i_win(){ // to camelcase
         for (int i = 0; i<size; i++){
             for (int j = 0; j < size; j++) {
-                if (j<size-2 && i<size-2){
-                    if ((board_cells[i][j].getStatus() > 0
+                boolean test_diagonal =
+                    (j<size-2 && i<size-2) &&(
+                        (board_cells[i][j].getStatus() > 0
                         && board_cells[i][j].getStatus() == board_cells[j+1][j+1].getStatus()
                         && board_cells[i][j].getStatus() == board_cells[j+2][j+2].getStatus())
                         ||
                         (board_cells[i][j+2].getStatus() > 0
                         && board_cells[i][j+2].getStatus() == board_cells[i+1][j+1].getStatus()
                         && board_cells[i][j+2].getStatus() == board_cells[i+2][j].getStatus())
-                    ){
-                        test = true;
-                    }
-                }
-                else if (i<size-2){
-                    if ((board_cells[i][j].getStatus() > 0
+                    );
+
+                boolean test_vertical = i<size-2 && board_cells[i][j].getStatus() > 0
                         && board_cells[i][j].getStatus() == board_cells[i+1][j].getStatus()
-                        && board_cells[i][j].getStatus() == board_cells[i+2][j].getStatus())){
-                        test = true;
-                    }
-                }
-                else if (j<size-2){
-                    if ((board_cells[i][j].getStatus() > 0
+                        && board_cells[i][j].getStatus() == board_cells[i+2][j].getStatus();
+
+                boolean test_horizontal = j<size-2 && board_cells[i][j].getStatus() > 0
                         && board_cells[i][j].getStatus() == board_cells[i][j+1].getStatus()
-                        && board_cells[i][j].getStatus() == board_cells[i][j+2].getStatus())){
-                        test = true;
-                    }
+                        && board_cells[i][j].getStatus() == board_cells[i][j+2].getStatus();
+
+                if (test_diagonal || test_horizontal || test_vertical){
+                    return true;
                 }
+
+//                if (j<size-3 && i<size-3){
+//                    if ((board_cells[i][j].getStatus() > 0
+//                        && board_cells[i][j].getStatus() == board_cells[j+1][j+1].getStatus()
+//                        && board_cells[i][j].getStatus() == board_cells[j+3][j+3].getStatus()
+//                        && board_cells[i][j].getStatus() == board_cells[j+2][j+2].getStatus())
+//                        ||
+//                        (board_cells[i][j+3].getStatus() > 0
+//                        && board_cells[i][j+3].getStatus() == board_cells[i+1][j+2].getStatus()
+//                        && board_cells[i][j+3].getStatus() == board_cells[i+2][j+1].getStatus()
+//                        && board_cells[i][j+3].getStatus() == board_cells[i+3][j].getStatus())){
+//                        return true;
+//                    }
+//                }
+//                if (i<size-3 && board_cells[i][j].getStatus() > 0
+//                    && board_cells[i][j].getStatus() == board_cells[i+1][j].getStatus()
+//                    && board_cells[i][j].getStatus() == board_cells[i+3][j].getStatus()
+//                    && board_cells[i][j].getStatus() == board_cells[i+2][j].getStatus()){
+//                    return true;
+//                }
+//
+//                if (j<size-3&& board_cells[i][j].getStatus() > 0
+//                    && board_cells[i][j].getStatus() == board_cells[i][j+1].getStatus()
+//                    && board_cells[i][j].getStatus() == board_cells[i][j+3].getStatus()
+//                    && board_cells[i][j].getStatus() == board_cells[i][j+2].getStatus()){
+//                    return true;
+//                }
             }
         }
-        return test;
+        return false;
     }
 }
