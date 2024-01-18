@@ -3,12 +3,7 @@ public class ArtificialPlayer extends Player{
         super(n, name);
     }
 
-    public int get_number(){
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return (int) (Math.random() * 10);
+    public Integer get_number(){
+        return (int) (Math.random() * 9);
     }
 }

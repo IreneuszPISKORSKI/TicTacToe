@@ -6,9 +6,9 @@ public class HumanPlayer extends Player{
         set_Im_ai(false);
     }
 
-    public int get_number(){
+    public Integer get_number(){
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        int pos_a = -55;
+        Integer pos_a = null;
 
         if(getRepresentation()==1){
             System.out.print(c_term.YELLOW + getName() + c_term.RESET);

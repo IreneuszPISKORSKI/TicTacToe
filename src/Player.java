@@ -1,10 +1,9 @@
 abstract class Player {
     private int representation;
     private String name;
-
     private boolean im_ai;
-
     static Colors_Terminal c_term = new Colors_Terminal();
+
     public Player(int n, String name){
         this.name = name;
         if (n==0){
@@ -13,9 +12,11 @@ abstract class Player {
             this.representation = 2;
         }
     }
+
     public int getRepresentation() {
         return representation;
     }
+
     public String getName() {
         return name;
     }
@@ -27,7 +28,8 @@ abstract class Player {
     public void set_Im_ai(boolean im_ai) {
         this.im_ai = im_ai;
     }
-    public int get_number(){
-        return -55;
+
+    public Integer get_number(){
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+import static java.lang.Integer.parseInt;
+
 public class TicTacToe {
     static int size = 3;
     static Cell[][] board_cells = new Cell[size][size];
@@ -32,15 +34,21 @@ public class TicTacToe {
     static void game_initialization(){
         int start = 0;
         for (int i = 0; i < players.length ; i++) {
-            String name = scanner_user();
-            players[i] = new ArtificialPlayer(start, name);
+
+
+            String[] user = scanner_user();
+            if (parseInt(user[1])==1){
+                players[i] = new HumanPlayer(start, user[0]);
+            }else {
+                players[i] = new ArtificialPlayer(start, user[0]);
+            }
             if (start == 0) {
-                System.out.println("The player "+ c_term.YELLOW + players[0].getName() + c_term.RESET + " plays as " + c_term.YELLOW + "O" + c_term.RESET);
+                System.out.println("The player "+ Colors_Terminal.YELLOW + players[0].getName() + Colors_Terminal.RESET + " plays as " + Colors_Terminal.YELLOW + "O" + Colors_Terminal.RESET);
                 System.out.println(" ");
                 System.out.println("Now give me the second one");
                 start = 1;
             }else {
-                System.out.println("The player " + c_term.BLUE + players[1].getName() + c_term.RESET + " plays as " + c_term.BLUE + "X" + c_term.RESET);
+                System.out.println("The player " + Colors_Terminal.BLUE + players[1].getName() + Colors_Terminal.RESET + " plays as " + Colors_Terminal.BLUE + "X" + Colors_Terminal.RESET);
             }
         }
 
@@ -51,13 +59,27 @@ public class TicTacToe {
         }
     }
 
-    static String scanner_user(){
+    static String[] scanner_user(){
+        String[] user = new String[2];
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Enter the player's username");
-
-        String userName = myObj.nextLine();  // Read user input
-        System.out.println("Username is: " + userName);  // Output user input
-        return userName;
+        System.out.println("Enter the player's name");
+        user[0] = myObj.nextLine();  // Read user input
+        while (true){
+            System.out.println("Player (1) or AI(2)?");
+            int user_or_ai = 0;
+            Scanner myInt = new Scanner(System.in);
+            try {
+                user_or_ai = myInt.nextInt();  // Read user input
+            }catch (Exception e){
+                System.out.println("Please re-enter your choice, this time number...");
+            }
+            if(user_or_ai == 1 || user_or_ai == 2){
+                user[1] = Integer.toString(user_or_ai);
+                break;
+            }
+        }
+        System.out.println("Username is: " + user[0]);  // Output user input
+        return user;
     }
 
     static void setOwner(Player player){
@@ -68,39 +90,16 @@ public class TicTacToe {
     static int[] getMoveFromPlayer(Player player){
         int pos_x = 0;
         int pos_y = 0;
-        int pos_a; // unified position
+        Integer pos_a; // unified position
         int[] pos = new int[2];
 
-//        boolean repeat = true;
         while (true) {
 
-//            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-//
-////            System.out.println("Enter pos x:");
-////            pos_x = myObj.nextInt();  // Read user input
-////            System.out.println("Enter pos y:");
-////            pos_y = myObj.nextInt();  // Read user input
-//
-//            if(player.getRepresentation()==1){
-//                System.out.print(c_term.YELLOW + player.getName() + c_term.RESET);
-//            }else {
-//                System.out.print(c_term.BLUE + player.getName() + c_term.RESET);
-//            }
-//            System.out.println(" enter the grid number:");
-//            try {
-//                pos_a = myObj.nextInt() -1 ;  // Read user input
-//            }catch (Exception e){
-//                System.out.println("Please re-enter your choice, this time number...");
-//                continue;
-//            }
-//
-
             pos_a = player.get_number();
-            System.out.println(pos_a);
-            if (pos_a<0 && pos_a>=size*size && !player.is_Im_ai()) {
+            if (pos_a!=null && pos_a<=0 && pos_a>=size*size && !player.is_Im_ai()) {
                 System.out.println("Please re-enter your choice, position off the grid");
                 continue;
-            } else if (pos_a<0 && pos_a>=size*size && player.is_Im_ai()) {
+            } else if (pos_a == null || (pos_a < 0 && pos_a >= size * size && player.is_Im_ai())) {
                 continue;
             }
 
@@ -125,7 +124,11 @@ public class TicTacToe {
             setOwner(players[t]);
             display();
             if (did_i_win()){
-                System.out.println("Player " + players[t].getName() +" win!");
+                if (players[t].getRepresentation()==1){
+                    System.out.println("Player " + Colors_Terminal.YELLOW + players[0].getName() + Colors_Terminal.RESET +" win!");
+                } else if (players[t].getRepresentation()==2) {
+                    System.out.println("Player " + Colors_Terminal.BLUE + players[1].getName() + Colors_Terminal.RESET +" win!");
+                }
                 return;
             }
             t = t == 0 ? 1 : 0;
