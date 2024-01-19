@@ -1,8 +1,7 @@
-abstract class Player {
-    private int representation;
-    private String name;
+public abstract class Player {
+    private final int representation;
+    private final String name;
     private boolean im_ai;
-    static Colors_Terminal c_term = new Colors_Terminal();
 
     public Player(int n, String name){
         this.name = name;
