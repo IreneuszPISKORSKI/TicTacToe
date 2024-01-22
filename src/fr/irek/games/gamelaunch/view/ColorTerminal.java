@@ -1,3 +1,5 @@
+package fr.irek.games.gamelaunch.view;
+
 public enum ColorTerminal {
     RESET("\u001B[0m"),
     BLACK("\u001B[30m"),

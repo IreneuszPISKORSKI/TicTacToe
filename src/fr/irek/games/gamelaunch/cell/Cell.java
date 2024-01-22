@@ -1,8 +1,12 @@
+package fr.irek.games.gamelaunch.cell;
+
+import fr.irek.games.gamelaunch.view.View;
+
 public class Cell {
     private int status;
-    private View view = new View();
+    private final View view = new View();
 
-    void getRepresentation(int number) {
+    public void getRepresentation(int number) {
         view.cell_representation(status, number);
     }
 

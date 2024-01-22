@@ -1,3 +1,5 @@
+package fr.irek.games.gamelaunch.player;
+
 public abstract class Player {
     private final int representation;
     private final String name;
@@ -28,7 +30,5 @@ public abstract class Player {
         this.im_ai = im_ai;
     }
 
-    public Integer get_number(){
-        return null;
-    }
+    public abstract int[] get_number();
 }

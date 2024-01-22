@@ -1,8 +1,13 @@
+package fr.irek.games.gamelaunch;
+
+import fr.irek.games.gamelaunch.view.View;
+import fr.irek.games.gamelaunch.player.Player;
+
 import java.util.Scanner;
 
 public class InteractionUtilisateur {
     private View view = new View();
-    public String[] scanner_user(){
+    public String[] scanner_enter_user(){
         String[] user = new String[2];
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         view.enter_name();
@@ -24,9 +29,9 @@ public class InteractionUtilisateur {
         return user;
     }
 
-    public Integer human_choose(Player player){
+    public int human_choose(Player player){
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        Integer pos_a = null;
+        int pos_a = -1;
 
         view.now_its_your_turn(player);
         try {

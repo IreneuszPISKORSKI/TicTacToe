@@ -1,3 +1,9 @@
+package fr.irek.games.gamelaunch.view;
+
+import fr.irek.games.gamelaunch.cell.Cell;
+import fr.irek.games.gamelaunch.player.Player;
+import fr.irek.games.gamelaunch.view.ColorTerminal;
+
 public class View {
 
     public void enter_name(){
@@ -27,14 +33,14 @@ public class View {
         return 1;
     }
 
-    public void display_grid(Cell[][] board_cells, int size){
-        show_line(size);
-        for (int i = 0; i < board_cells.length; i++) {
-            for (int j = 0; j < board_cells[i].length; j++) {
-                board_cells[i][j].getRepresentation(j+i*size +1);
+    public void display_grid(Cell[][] board_cells, int sizeX, int sizeY){
+        show_line(sizeX);
+        for (int i = 0; i < sizeY; i++) {
+            for (int j = 0; j < sizeX; j++) {
+                board_cells[i][j].getRepresentation(j+i*sizeX +1);
             }
             System.out.println("|");
-            show_line(size);
+            show_line(sizeX);
         }
         System.out.println();
     }
